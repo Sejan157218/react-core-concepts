@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
   const friends=[
@@ -11,15 +12,18 @@ function App() {
   ]
   return (
     <div className="App">
+      <ExternalUser></ExternalUser>
+      <Counter></Counter>
       {
         friends.map(friend=><Friends name ={friend.name}  Profession ={friend.Profession} ></Friends>)
       }
+      
       {/* <Person name ="sejan" Profession = "React Developer"></Person>
       <Person name ="sajal" Profession = "React Developer"></Person>
       <Fiends name ="ASH" Profession = "React Developer"></Fiends>
       <Fiends name ="ABC" Profession = "React Developer"></Fiends> */}
     </div>
-  );
+  ); 
 }
 function Person(props){
   const personStyle = {
@@ -45,4 +49,40 @@ function Friends(props){
   )
 }
 
+function Counter(){
+  const [count,setCount] = useState(0);
+  const handlerIncrease=()=>setCount (count + 1);
+  const handlerDecrease=()=>setCount (count - 1);
+  return (
+    <div style={{backgroundColor: "#3f8193",padding: '20px',borderRadius: '10px',border: '1px solid #010308',margin: '20px',}}>
+      <h1>Count : {count}</h1>
+      <button onClick={handlerIncrease}>Increase</button>
+      <button onClick={handlerDecrease}>Decrease</button>
+      
+    </div>
+  )
+}
+function ExternalUser(){
+  const [users,setUsers] = useState([]);
+  useEffect(()=>{
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(response => response.json())
+    .then(json => setUsers(json))
+  },[])
+  return(
+    <div className="person">
+      {
+        users.map(user=><User name={user.name} email={user.email}></User>)
+      }
+    </div>
+  )
+}
+function User(props){
+  return (
+    <div className="person">
+      <h1>Name : {props.name}</h1>
+      <h1>Eamil : {props.email}</h1>
+    </div>
+  )
+}
 export default App;
